@@ -4,26 +4,26 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git 'https://github.com/jaiswaladi246/CountryBank.git'
+                git branch: 'main', url: 'https://github.com/Arun-prasad-j27/CountryBank-pipeline-project.git'
             }
         }
         
         stage('OWASP Dependency Check') {
             steps {
-                 dependencyCheck additionalArguments: ' --scan ./ ', odcInstallation: 'DC'
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                dependencyCheck additionalArguments:'--scan ./',odcInstallation:'DC'
+                    dependencyCheckPublisher pattern:'**/dependency-check-report.xml' 
             }
         }
         
-        stage('Trivy') {
+        stage('Trivy ') {
             steps {
-                 sh "trivy fs ."
+                sh "trivy fs ."
             }
         }
         
-         stage('Build & deploy') {
+        stage('Docker Build & Deploy') {
             steps {
-                 sh "docker-compose up -d"
+                sh "docker-compose up -d"
             }
         }
     }
